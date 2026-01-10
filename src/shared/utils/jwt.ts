@@ -1,19 +1,22 @@
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
+import type { CustomJwtPayload } from '../../features/auth/types/auth.types';
 
-export interface TokenPayload {
-    sub: string;
-    idUser: number;
-    roles: string[];
-    permissions: string[];
-    iat: number;
-    exp: number;
-}
+/**
+ * Decodifica un JWT y devuelve el payload tipado.
+ * Envuelve jwtDecode y maneja cualquier error.
+ */
+export const decodeJwt = (token: string): CustomJwtPayload => {
+  try {
+    return jwtDecode(token) as CustomJwtPayload;
+  } catch (err) {
+    console.error('Error decodificando JWT:', err);
+    throw err;
+  }
+};
 
-export const decodeToken = (token: string): TokenPayload | null => {
-    try {
-        return jwtDecode<TokenPayload>(token);
-    } catch (e) {
-        console.error('Token invalido',e);
-        return null;
-    }
+/**
+ * Verifica si un token expiró
+ */
+export const isTokenExpired = (exp: number): boolean => {
+  return Date.now() >= exp * 1000;
 };

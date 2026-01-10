@@ -1,42 +1,15 @@
-import { useState } from "react";
-import { login as loginService } from "../services/authService";
+import { useAppDispatch, useAppSelector } from "../../../app/store/hooks";
+import { login, logout } from "../store/authSlice";
+import type { LoginRequest } from "../types/auth.types";
 
 export const useAuth = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const { user, token, isAuthenticated, loading, error } = useAppSelector(
+    (state) => state.auth
+  );
 
-    const login = async(username: string, password: string) => {
-        setLoading(true);
-        setError(null);
+  const loginUser = (credentials: LoginRequest) => dispatch(login(credentials));
+  const logoutUser = () => dispatch(logout());
 
-        try {
-            const data = await loginService({username,password});
-
-            localStorage.setItem('token',data.token);
-
-            return true;
-        } catch (err) {
-            setError('Credenciales incorrectas');
-            return false;
-        }finally{
-            setLoading(false);
-        }
-    };
-
-    const logout = () => {
-localStorage.removeItem('token');
-    };
-
-    const isAuthenticated = () =>{
-        return !!localStorage.getItem('token');
-    };
-
-    return {
-        login,
-        logout,
-        loading,
-        error,
-        isAuthenticated,
-    };
-
+  return { user, token, isAuthenticated, loading, error, loginUser, logoutUser };
 };

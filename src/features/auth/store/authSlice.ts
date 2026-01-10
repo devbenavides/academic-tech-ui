@@ -1,48 +1,64 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../../../app/store';
-import { login as loginService } from '../services/authService';
-import { decodeToken } from '../../../shared/utils/jwt';
-import type { TokenPayload } from '../../../shared/utils/jwt';
+import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
+import type { AuthState, CustomJwtPayload, LoginRequest, LoginResponse } from '../types/auth.types';
+import { decodeJwt, isTokenExpired } from '../../../shared/utils/jwt';
+import { authService } from '../services/auth.service';
 
-interface AuthState {
-  token: string | null;
-  user: TokenPayload | null;
-  loading: boolean;
-  error: string | null;
+// --- Extraer token de localStorage al iniciar la app ---
+const tokenFromStorage = localStorage.getItem("token");
+
+let userFromToken: CustomJwtPayload | null = null;
+
+if (tokenFromStorage && typeof tokenFromStorage === "string") {
+  try {
+    const decoded = decodeJwt(tokenFromStorage);
+    if (!isTokenExpired(decoded.exp)) {
+      userFromToken = decoded;
+    } else {
+      localStorage.removeItem("token");
+    }
+  } catch (err) {
+    console.error("Token inválido en storage:", err);
+    localStorage.removeItem("token");
+  }
 }
 
+// --- Estado inicial ---
 const initialState: AuthState = {
-  token: localStorage.getItem('token'),
-  user: localStorage.getItem('token')
-    ? decodeToken(localStorage.getItem('token')!)
-    : null,
+  token: tokenFromStorage,
+  user: userFromToken,
+  isAuthenticated: !!userFromToken,
   loading: false,
   error: null,
 };
 
-export const login = createAsyncThunk(
-  'auth/login',
-  async (
-    { username, password }: { username: string; password: string },
-    { rejectWithValue }
-  ) => {
+// --- AsyncThunk para login ---
+export const login = createAsyncThunk<
+  LoginResponse,
+  LoginRequest,
+  { rejectValue: string }
+>(
+  "auth/login",
+  async (credentials, { rejectWithValue }) => {
     try {
-      return await loginService({ username, password });
-    } catch {
-      return rejectWithValue('Credenciales incorrectas');
+      const response = await authService.login(credentials); // ✅ llama al servicio
+      return response; // { token: string }
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || "Login error");
     }
   }
 );
 
+// --- Slice ---
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
-    logout: (state) => {
+    logout(state) {
       state.token = null;
       state.user = null;
-      localStorage.clear();
+      state.isAuthenticated = false;
+      state.error = null;
+      localStorage.removeItem("token");
     },
   },
   extraReducers: (builder) => {
@@ -51,12 +67,32 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
-        state.token = action.payload.token;
-        state.user = decodeToken(action.payload.token);
+      .addCase(login.fulfilled, (state, action: PayloadAction<LoginResponse>) => {
+        const token = action.payload?.token;
 
-        localStorage.setItem('token', action.payload.token);
+        if (token && typeof token === "string") {
+          try {
+            const decoded = decodeJwt(token);
+
+            state.token = token;
+            state.user = decoded;
+            state.isAuthenticated = true;
+            state.loading = false;
+
+            localStorage.setItem("token", token);
+          } catch (err) {
+            console.error("Token inválido al hacer login:", err);
+            state.error = "Token inválido";
+            state.token = null;
+            state.user = null;
+            state.isAuthenticated = false;
+          }
+        } else {
+          state.error = "Token inválido o vacío";
+          state.token = null;
+          state.user = null;
+          state.isAuthenticated = false;
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -67,3 +103,10 @@ const authSlice = createSlice({
 
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;
+
+// --- Helpers para roles y permisos ---
+export const hasRole = (user: CustomJwtPayload | null, role: string) =>
+  user?.roles.includes(role);
+
+export const hasPermission = (user: CustomJwtPayload | null, perm: string) =>
+  user?.permissions.includes(perm);

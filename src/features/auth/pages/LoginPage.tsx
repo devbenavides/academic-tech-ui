@@ -1,63 +1,78 @@
-import React, { useState } from "react";
-import { useAuth } from "../hooks/useAuth";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-
-
+import type { LoginRequest } from "../types/auth.types";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage: React.FC = () => {
-  const { login, loading, error } = useAuth();
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const {loginUser, loading, error, isAuthenticated } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Redirige al dashboard si ya está autenticado
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const success = await login(username, password);
-    if (success) {
-      navigate('/dashboard');
-    }
+    // Construimos el objeto LoginRequest
+    const credentials: LoginRequest = { username, password };
+
+    // Dispatch del thunk de login
+    loginUser(credentials);
   };
 
   return (
     <div className="container mt-5" style={{ maxWidth: 400 }}>
-      <h2 className="mb-4">Login</h2>
+      <h2 className="mb-4 text-center">Login</h2>
 
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
-          <label className="form-label">Email</label>
+          <label htmlFor="username" className="form-label">
+            Usuario
+          </label>
           <input
+            id="username"
             type="text"
             className="form-control"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            placeholder="Ingrese su usuario"
             required
+            autoFocus
           />
         </div>
 
         <div className="mb-3">
-          <label className="form-label">Password</label>
+          <label htmlFor="password" className="form-label">
+            Contraseña
+          </label>
           <input
+            id="password"
             type="password"
             className="form-control"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Ingrese su contraseña"
             required
           />
         </div>
 
-        {error && (
-          <div className="alert alert-danger">{error}</div>
-        )}
+        {/* Mensaje de error */}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         <button
           type="submit"
           className="btn btn-primary w-100"
           disabled={loading}
         >
-          {loading ? 'Ingresando...' : 'Login'}
+          {loading ? "Ingresando..." : "Login"}
         </button>
       </form>
     </div>
