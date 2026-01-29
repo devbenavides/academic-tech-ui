@@ -1,4 +1,4 @@
-import type { JwtPayload as BaseJwtPayload} from "jwt-decode";
+import type { JwtPayload as BaseJwtPayload } from "jwt-decode";
 
 export interface LoginResponse {
   token: string;
@@ -9,8 +9,8 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface CustomJwtPayload extends BaseJwtPayload{
-    sub: string;
+export interface CustomJwtPayload extends BaseJwtPayload {
+  sub: string;
   idUser: number;
   roles: string[];
   permissions: string[];
@@ -18,10 +18,10 @@ export interface CustomJwtPayload extends BaseJwtPayload{
   exp: number;
 }
 
-export interface AuthState{
-    token: string | null;
-    user: CustomJwtPayload | null;
-    isAuthenticated: boolean;
-    loading: boolean;
-    error: string | null;
+export interface AuthState {
+  token: string | null;
+  user: CustomJwtPayload | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
 }

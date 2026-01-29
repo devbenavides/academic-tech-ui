@@ -76,6 +76,32 @@ const Navbar: React.FC = () => {
               </li>
             )}
 
+            {isAuthenticated && hasRole("ROLE_ADMIN") && (
+              <li className="nav-item">
+                <NavLink
+                  to="/teachers"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
+                  Teachers
+                </NavLink>
+              </li>
+            )}
+
+            {isAuthenticated && hasRole("ROLE_ADMIN") && (
+              <li className="nav-item">
+                <NavLink
+                  to="/teachers-create"
+                  className={({ isActive }) =>
+                    isActive ? "nav-link active" : "nav-link"
+                  }
+                >
+                  Create Teacher
+                </NavLink>
+              </li>
+            )}
+
             {/* Login / Logout */}
             {!isAuthenticated ? (
               <li className="nav-item">

@@ -6,6 +6,8 @@ import LoginPage from "../../features/auth/pages/LoginPage";
 import MainLayout from "../layouts/MainLayout";
 import UnauthorizedPage from "../../shared/pages/UnauthorizedPage";
 import ProtectedRoute from "./ProtectedRoute";
+import { TeacherListPage } from "../../features/teachers/pages/TeacherListPage";
+import { TeacherCreatePage } from "../../features/teachers/pages/TeacherCreatePage";
 
 const AppRoutes: React.FC = () => (
   <Routes>
@@ -13,10 +15,16 @@ const AppRoutes: React.FC = () => (
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      {/* accesible por rol STUDENT */}
-      <Route path="/dashboard" element={<ProtectedRoute requiredRoles={['ROLE_STUDENT']}>
-        <DashboardPage />
-      </ProtectedRoute>} />
+      {/* Protected routes*/}
+      <Route element={<ProtectedRoute requiredRoles={['ROLE_ADMIN']}/>}>
+        <Route path="/dashboard" element={<DashboardPage />} />         
+      </Route>
+      <Route element={<ProtectedRoute requiredRoles={['ROLE_ADMIN']}/>}>
+        <Route path="/teachers" element={<TeacherListPage />} />         
+      </Route>
+      <Route element={<ProtectedRoute requiredRoles={['ROLE_ADMIN']}/>}>
+        <Route path="/teachers-create" element={<TeacherCreatePage />} />         
+      </Route>
 
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
     </Route>
