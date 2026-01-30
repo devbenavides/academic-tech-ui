@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
             </li>
 
             {/* Dashboard por rol */}
-            {isAuthenticated && hasRole("ROLE_STUDENT") && (
+            {isAuthenticated  && (
               <li className="nav-item">
                 <NavLink
                   to="/dashboard"
@@ -85,19 +85,6 @@ const Navbar: React.FC = () => {
                   }
                 >
                   Teachers
-                </NavLink>
-              </li>
-            )}
-
-            {isAuthenticated && hasRole("ROLE_ADMIN") && (
-              <li className="nav-item">
-                <NavLink
-                  to="/teachers-create"
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
-                  }
-                >
-                  Create Teacher
                 </NavLink>
               </li>
             )}

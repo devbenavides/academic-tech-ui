@@ -1,25 +1,28 @@
 import { useState } from "react";
 import { updateTeacher } from "../services/teacherService";
 import type { TeacherResponse } from "../types/teacherResponse";
-import type { CreateTeacherRequest } from "../types/createTeacherRequest";
+import type { CreateTeacherFormValues } from "../validation/types";
+import { mapCreateTeacherFormDTO } from "../mappers/mapCreateTeacherFormDTO";
+import type { BackendErrorResponse } from "../../../shared/types/backendErrors";
 
 export const useUpdateTeacher = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
 
-  const execute = async (id: number, payload: CreateTeacherRequest): Promise<TeacherResponse | null> => {
+  const execute = async (id: number, payload: CreateTeacherFormValues): Promise<TeacherResponse | null> => {
     setLoading(true);
-    setError(null);
     try {
-      const res = await updateTeacher(id, payload);
-      return res;
+      const request = mapCreateTeacherFormDTO(payload);
+      return await updateTeacher(id, request);
     } catch (err: any) {
-      setError(err);
-      return null;
+      if (err?.response?.data) {
+        const backendError = err.response.data as BackendErrorResponse;
+        throw backendError;
+      }
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  return { execute, loading, error };
+  return { execute, loading };
 };

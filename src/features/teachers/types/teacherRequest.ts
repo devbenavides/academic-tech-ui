@@ -5,5 +5,4 @@ export interface TeacherRequest{
     lastName: string;
     secondLastName?: string;
     specialty: string;
-    //user: UserRequest;
 }

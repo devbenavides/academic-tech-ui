@@ -12,7 +12,7 @@ export const getTeachers = async (): Promise<TeacherResponse[]> => {
 
 export const getTeacherById = async (id: number): Promise<TeacherResponse | null> => {
     try {
-        const res = await api.get(`{URL}/${id}`);
+        const res = await api.get(`${URL}/${id}`);
         return res.data;
     } catch (error: any) {
         if (error.message.includes("404")) {
@@ -28,11 +28,11 @@ export const createTeacher = async (data: CreateTeacherRequest): Promise<Teacher
 };
 
 export const updateTeacher = async (id: number, data: CreateTeacherRequest): Promise<TeacherResponse> => {
-    const res = await api.put(`{URL}/${id}`, data);
+    const res = await api.put(`${URL}/${id}`, data);
     return res.data;
 
 };
 
 export const deleteTeacher = async (id: number): Promise<void> => {
-    await api.get(`{URL}/${id}`);
+    await api.get(`${URL}/${id}`);
 };
