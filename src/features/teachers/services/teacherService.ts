@@ -34,5 +34,9 @@ export const updateTeacher = async (id: number, data: CreateTeacherRequest): Pro
 };
 
 export const deleteTeacher = async (id: number): Promise<void> => {
-    await api.get(`${URL}/${id}`);
+    try {
+        await api.delete(`${URL}/${id}`);        
+    } catch (err:any) {
+       throw err;        
+    }
 };

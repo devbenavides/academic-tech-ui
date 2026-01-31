@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { deleteTeacher } from "../services/teacherService";
+import { toast } from "react-toastify";
+import { toastService } from "../../../shared/services/toastService";
+import type { AxiosError } from "axios";
+import axios from "axios";
 
 export const useDeleteTeacher = () => {
   const [loading, setLoading] = useState(false);
@@ -11,7 +15,25 @@ export const useDeleteTeacher = () => {
     try {
       await deleteTeacher(id);
       return true;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      let message = "Error al eliminar el profesor";
+
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const data = err.response?.data as any;
+
+        if (status === 404) {
+          //message = data?.message || "Registro no encontrado";
+          //toastService.info(message);
+          return true; // éxito lógico
+        }
+
+        message = data?.message || err.message || message;
+      } else {
+        console.error("Error inesperado:", err);
+      }
+
+      toastService.error(message);
       setError(err);
       return false;
     } finally {

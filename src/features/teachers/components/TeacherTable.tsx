@@ -3,9 +3,10 @@ import type { TeacherResponse } from "../types/teacherResponse";
 type Props = {
   teachers: TeacherResponse[];
   onEdit:(teacher: TeacherResponse)=> void;
+  onDelete:(teacher: TeacherResponse) => void;
 };
 
-export const TeacherTable = ({ teachers, onEdit }: Props) => {
+export const TeacherTable = ({ teachers, onEdit, onDelete }: Props) => {
   if (teachers.length === 0) {
     return <p>No hay profesores registrados</p>;
   }
@@ -30,10 +31,16 @@ export const TeacherTable = ({ teachers, onEdit }: Props) => {
             <td>{t.user.username}</td>
             <td>
               <button
-                className="bg-yellow-400 text-white px-2 py-1 rounded"
+                className="btn btn-primary btn-sm"
                 onClick={() => onEdit(t)}
               >
                 Editar
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => onDelete(t)}
+              >
+                Eliminar
               </button>
             </td>
           </tr>

@@ -54,7 +54,7 @@ api.interceptors.response.use(
       }
 
       if (status === 404) {
-        return Promise.reject({ type: "notFound", message: "Recurso no encontrado" });
+        return Promise.reject(error);
       }
 
       if (status === 500) {
