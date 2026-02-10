@@ -1,11 +1,12 @@
 import type { UserResponse } from "../../users/types/userResponse";
 
-export interface TeacherResponse{
-    idTeacher: number;
+export interface StudentResponse{
+    idStudent: number;
     firstName: string;
     middleName?: string;
     lastName: string;
     secondLastName?: string;
-    specialty: string;
+    enrollmentNumber?: string;
+    dateOfbirth: string;
     user: UserResponse;
 }

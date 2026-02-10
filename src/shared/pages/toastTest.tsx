@@ -1,5 +1,5 @@
 
-import { toastService } from "../../../shared/services/toastService";
+import { toastService } from "../services/toastService";
 
 export const ToastTestButton = () => {
   return (

@@ -15,7 +15,7 @@ export const mapResponseTeacherFormDTO = (
     idUser: data.user.idUser,
     username: data.user.username,
     email: data.user.email,
-    password: data.user.password || undefined,
+    //password: data.user.password || undefined,
     roles: data.user.roles,
   },
 });

@@ -1,8 +1,8 @@
-
-export interface TeacherRequest{
+export interface StudentRequest{
     firstName: string;
     middleName?: string;
     lastName: string;
     secondLastName?: string;
-    specialty: string;
+    enrollmentNumber?: string;
+    dateOfbirth: string;
 }

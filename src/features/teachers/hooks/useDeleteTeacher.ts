@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { deleteTeacher } from "../services/teacherService";
-import { toast } from "react-toastify";
 import { toastService } from "../../../shared/services/toastService";
-import type { AxiosError } from "axios";
 import axios from "axios";
 
 export const useDeleteTeacher = () => {

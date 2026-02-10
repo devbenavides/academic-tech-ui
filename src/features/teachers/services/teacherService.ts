@@ -1,4 +1,3 @@
-
 import type { TeacherResponse } from "../types/teacherResponse";
 import type { CreateTeacherRequest } from "../types/createTeacherRequest";
 import api from "../../../services/api";
@@ -35,8 +34,8 @@ export const updateTeacher = async (id: number, data: CreateTeacherRequest): Pro
 
 export const deleteTeacher = async (id: number): Promise<void> => {
     try {
-        await api.delete(`${URL}/${id}`);        
-    } catch (err:any) {
-       throw err;        
+        await api.delete(`${URL}/${id}`);
+    } catch (err: any) {
+        throw err;
     }
 };

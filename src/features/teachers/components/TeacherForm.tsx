@@ -70,23 +70,36 @@ export const TeacherForm = ({
       <div>
         <input
           {...register("teacher.firstName")}
-          placeholder="Nombre"
+          placeholder="Primer Nombre"
           className={inputClass(errors.teacher?.firstName?.message)}
         />
         {errors.teacher?.firstName && (
           <p className="error-message">{errors.teacher.firstName.message}</p>
         )}
       </div>
-
+      <div>
+        <input
+          {...register("teacher.middleName")}
+          placeholder="Segundo Nombre"
+          className={inputClass()}
+        />        
+      </div>
       <div>
         <input
           {...register("teacher.lastName")}
-          placeholder="Apellido"
+          placeholder="Primer Apellido"
           className={inputClass(errors.teacher?.lastName?.message)}
         />
         {errors.teacher?.lastName && (
           <p className="error-message">{errors.teacher.lastName.message}</p>
         )}
+      </div>
+      <div>
+        <input
+          {...register("teacher.secondLastName")}
+          placeholder="Segundo Apellido"
+          className={inputClass( )}
+        />
       </div>
 
       <div>
