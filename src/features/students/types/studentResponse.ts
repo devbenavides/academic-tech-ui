@@ -7,6 +7,6 @@ export interface StudentResponse{
     lastName: string;
     secondLastName?: string;
     enrollmentNumber?: string;
-    dateOfbirth: string;
+    dateOfBirth: string;
     user: UserResponse;
 }

@@ -1,33 +1,32 @@
-import type { TeacherResponse } from "../types/teacherResponse";
+import type { StudentResponse } from "../types/studentResponse";
 
 type Props = {
-  teachers: TeacherResponse[];
-  onEdit: (teacher: TeacherResponse) => void;
-  onDelete: (teacher: TeacherResponse) => void;
+  students: StudentResponse[];
+  onEdit: (student: StudentResponse) => void;
+  onDelete: (student: StudentResponse) => void;
 };
 
-export const TeacherTable = ({ teachers, onEdit, onDelete }: Props) => {
-  if (teachers.length === 0) {
-    return <p>No hay profesores registrados</p>;
-  }
-
-  return (
-    <table>
+export const StudentTable = ({students,onEdit,onDelete}:Props)=>{
+    if(students.length === 0){
+        return <p>No hay estudiantes registrados</p>
+    }
+    return(
+        <table>
       <thead>
         <tr>
           <th>Nombre</th>
-          <th>Especialidad</th>
+          <th>Fecha de Nacimiento</th>
           <th>Usuario</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
-        {teachers.map((t) => (
-          <tr key={t.idTeacher}>
+        {students.map((t) => (
+          <tr key={t.idStudent}>
             <td>
               {t.firstName} {t.lastName}
             </td>
-            <td>{t.specialty}</td>
+            <td>{t.dateOfBirth}</td>
             <td>{t.user.username}</td>
             <td>
               <button
@@ -47,5 +46,5 @@ export const TeacherTable = ({ teachers, onEdit, onDelete }: Props) => {
         ))}
       </tbody>
     </table>
-  );
+    );
 };

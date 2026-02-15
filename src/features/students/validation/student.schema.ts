@@ -6,6 +6,6 @@ export const studentSchema = Yup.object({
     enrollmentNumber: Yup.string()
     .notRequired(),
     
-    dateOfbirth: Yup.string()
+    dateOfBirth: Yup.string()
     .required("Ingrese la fecha de nacimiento")
 });

@@ -4,5 +4,5 @@ export interface StudentRequest{
     lastName: string;
     secondLastName?: string;
     enrollmentNumber?: string;
-    dateOfbirth: string;
+    dateOfBirth: string;
 }

@@ -18,6 +18,16 @@ export const userSchema = Yup.object()
             // Editar → hay idUser → password opcional
             otherwise: () => Yup.string().optional(),
         }),
+
+        confirmPassword: Yup.string().when("password", (password, schema) => {
+            if (password) {
+                return schema
+                    .required("Debe confirmar la contraseña")
+                    .oneOf([Yup.ref("password")], "Las contraseñas no coinciden");
+            }
+            return schema.optional();
+        }),
+
         roles: Yup.array()
             .of(Yup.string().required())
             .min(1, "Debe tener al menos un rol")

@@ -10,7 +10,7 @@ export const mapResponseStudentFormDTO = (
     middleName: data.middleName,
     secondLastName: data.secondLastName,
     enrollmentNumber: data.enrollmentNumber,
-    dateOfbirth: data.dateOfbirth,
+    dateOfBirth: data.dateOfBirth,
   },
   user: {
     idUser: data.user.idUser,

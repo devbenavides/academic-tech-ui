@@ -1,7 +1,7 @@
 import type { CreateStudentRequest } from "../types/createStudentRequest";
 import type { CreateStudentFormValues } from "../validation/type";
 
-export const mapResponseStudentFormDTO = (
+export const mapCreateStudentFormDTO = (
     data: CreateStudentFormValues,
 ): CreateStudentRequest => ({
     student: {
@@ -10,7 +10,7 @@ export const mapResponseStudentFormDTO = (
         lastName: data.student.lastName,
         secondLastName: data.student.secondLastName || undefined,
         enrollmentNumber: data.student.enrollmentNumber || undefined,
-        dateOfbirth: data.student.dateOfbirth,
+        dateOfBirth: data.student.dateOfBirth,
     },
     user: {
         idUser: data.user.idUser,
