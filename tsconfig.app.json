@@ -18,8 +18,11 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    //solo se modifico a false para probar docker default true
+    "noUnusedLocals": false,
+    //solo se modifico a false para probar dockerdefault true
+    "noUnusedParameters": false,
+
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true

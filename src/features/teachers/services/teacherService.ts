@@ -2,7 +2,7 @@ import type { TeacherResponse } from "../types/teacherResponse";
 import type { CreateTeacherRequest } from "../types/createTeacherRequest";
 import api from "../../../services/api";
 
-const URL = "/api/v1/teachers";
+const URL = "/v1/teachers";
 
 export const getTeachers = async (): Promise<TeacherResponse[]> => {
     const res = await api.get(URL);

@@ -21,10 +21,8 @@ const LoginPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Construimos el objeto LoginRequest
     const credentials: LoginRequest = { username, password };
 
-    // Dispatch del thunk de login
     loginUser(credentials);
   };
 

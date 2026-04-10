@@ -11,22 +11,26 @@ export const userSchema = Yup.object()
 
         email: emailValidation,
 
-        password: Yup.string().when("idUser", {
-            // Crear → no hay idUser → password obligatorio
-            is: (value: number | undefined) => !value,
-            then: () => passwordValidation,
-            // Editar → hay idUser → password opcional
-            otherwise: () => Yup.string().optional(),
-        }),
+        password: Yup.string()
+            .nullable()
+            .transform((value) => (value === "" ? null : value))
+            .when("idUser", {
+                is: (value: number | undefined) => !value,
+                then: () => passwordValidation, // crear → obligatorio
+                otherwise: (schema) => schema.notRequired(), // editar → opcional
+            }),
 
-        confirmPassword: Yup.string().when("password", (password, schema) => {
-            if (password) {
-                return schema
-                    .required("Debe confirmar la contraseña")
-                    .oneOf([Yup.ref("password")], "Las contraseñas no coinciden");
-            }
-            return schema.optional();
-        }),
+        confirmPassword: Yup.string()
+            .nullable()
+            .transform((value) => (value === "" ? null : value))
+            .when("password", {
+                is: (password: string | null | undefined) => !!password,
+                then: (schema) =>
+                    schema
+                        .required("Debe confirmar la contraseña")
+                        .oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
+                otherwise: (schema) => schema.notRequired(),
+            }),
 
         roles: Yup.array()
             .of(Yup.string().required())

@@ -16,7 +16,7 @@ export const mapCreateStudentFormDTO = (
         idUser: data.user.idUser,
         username: data.user.username,
         email: data.user.email,
-        password: data.user.password,
+        password: data.user.password || undefined,
         roles: data.user.roles,
     },
 });
